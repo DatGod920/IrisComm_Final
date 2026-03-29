@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Settings, 
-  Eye, 
-  Timer, 
-  Languages, 
-  User, 
+import {
+  Settings,
+  Eye,
+  Timer,
+  Languages,
+  User,
   BrainCircuit,
-  RotateCcw, 
+  RotateCcw,
   WifiOff,
   Moon,
   Sun,
@@ -38,8 +38,8 @@ const languages = [
 ];
 
 export function SettingsScreen() {
-  const { 
-    eyeSensitivity, 
+  const {
+    eyeSensitivity,
     setEyeSensitivity,
     dwellTime,
     setDwellTime,
@@ -91,7 +91,7 @@ export function SettingsScreen() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-6 pb-32">
+    <div className="px-3 py-4 pb-24">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -122,7 +122,9 @@ export function SettingsScreen() {
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
                 <Label>Eye Sensitivity</Label>
-                <span className="text-sm text-muted-foreground">{eyeSensitivity}%</span>
+                <span className="text-sm text-muted-foreground">
+                  {eyeSensitivity}%
+                </span>
               </div>
               <Slider
                 value={[eyeSensitivity]}
@@ -144,7 +146,9 @@ export function SettingsScreen() {
                   <Timer className="w-4 h-4" />
                   Dwell Time
                 </Label>
-                <span className="text-sm text-muted-foreground">{dwellTime / 1000}s</span>
+                <span className="text-sm text-muted-foreground">
+                  {dwellTime / 1000}s
+                </span>
               </div>
               <Slider
                 value={[dwellTime]}
@@ -238,7 +242,9 @@ export function SettingsScreen() {
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-2">
                     <span>1 min</span>
-                    <span>Alert after {inactivityTimeout} min of inactivity</span>
+                    <span>
+                      Alert after {inactivityTimeout} min of inactivity
+                    </span>
                     <span>30 min</span>
                   </div>
                 </div>
@@ -300,7 +306,9 @@ export function SettingsScreen() {
                 <div className="flex items-center gap-3">
                   <BrainCircuit className="w-5 h-5 text-primary" />
                   <div>
-                    <h2 className="text-lg font-semibold">Presentation Tools</h2>
+                    <h2 className="text-lg font-semibold">
+                      Presentation Tools
+                    </h2>
                     <p className="text-sm text-muted-foreground">
                       Collapsed by default for live demos
                     </p>
@@ -348,12 +356,18 @@ export function SettingsScreen() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label className="flex items-center gap-2">
-                  {theme === "dark" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+                  {theme === "dark" ? (
+                    <Moon className="w-4 h-4" />
+                  ) : (
+                    <Sun className="w-4 h-4" />
+                  )}
                   Dark Mode
                 </Label>
                 <Switch
                   checked={theme === "dark"}
-                  onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+                  onCheckedChange={(checked) =>
+                    setTheme(checked ? "dark" : "light")
+                  }
                 />
               </div>
 
@@ -363,8 +377,8 @@ export function SettingsScreen() {
                   Sound Feedback
                 </Label>
                 <Switch
-                  checked={soundFeedback}
-                  onCheckedChange={setSoundFeedback}
+                  checked={audioFeedback}
+                  onCheckedChange={setAudioFeedback}
                 />
               </div>
 
@@ -494,7 +508,10 @@ export function SettingsScreen() {
                     onChange={(e) => setNewCondition(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && newCondition.trim()) {
-                        setMedicalConditions([...medicalConditions, newCondition.trim()]);
+                        setMedicalConditions([
+                          ...medicalConditions,
+                          newCondition.trim(),
+                        ]);
                         setNewCondition("");
                       }
                     }}
@@ -505,7 +522,10 @@ export function SettingsScreen() {
                     size="sm"
                     onClick={() => {
                       if (newCondition.trim()) {
-                        setMedicalConditions([...medicalConditions, newCondition.trim()]);
+                        setMedicalConditions([
+                          ...medicalConditions,
+                          newCondition.trim(),
+                        ]);
                         setNewCondition("");
                       }
                     }}
@@ -517,9 +537,21 @@ export function SettingsScreen() {
                 {medicalConditions.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {medicalConditions.map((c, i) => (
-                      <span key={i} className="px-2 py-1 rounded-full bg-red-500/20 text-xs flex items-center gap-1">
+                      <span
+                        key={i}
+                        className="px-2 py-1 rounded-full bg-red-500/20 text-xs flex items-center gap-1"
+                      >
                         {c}
-                        <button onClick={() => setMedicalConditions(medicalConditions.filter((_, j) => j !== i))} className="ml-1">×</button>
+                        <button
+                          onClick={() =>
+                            setMedicalConditions(
+                              medicalConditions.filter((_, j) => j !== i),
+                            )
+                          }
+                          className="ml-1"
+                        >
+                          ×
+                        </button>
                       </span>
                     ))}
                   </div>
@@ -558,9 +590,21 @@ export function SettingsScreen() {
                 {medications.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {medications.map((m, i) => (
-                      <span key={i} className="px-2 py-1 rounded-full bg-blue-500/20 text-xs flex items-center gap-1">
+                      <span
+                        key={i}
+                        className="px-2 py-1 rounded-full bg-blue-500/20 text-xs flex items-center gap-1"
+                      >
                         {m}
-                        <button onClick={() => setMedications(medications.filter((_, j) => j !== i))} className="ml-1">×</button>
+                        <button
+                          onClick={() =>
+                            setMedications(
+                              medications.filter((_, j) => j !== i),
+                            )
+                          }
+                          className="ml-1"
+                        >
+                          ×
+                        </button>
                       </span>
                     ))}
                   </div>
@@ -576,7 +620,9 @@ export function SettingsScreen() {
                   onChange={(e) => setEmergencyMedicalInfo(e.target.value)}
                   className="mt-2 bg-background/50 h-12"
                 />
-                <p className="text-xs text-muted-foreground mt-1">This info is sent with emergency alerts</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  This info is sent with emergency alerts
+                </p>
               </div>
 
               <div>
@@ -591,8 +637,8 @@ export function SettingsScreen() {
               </div>
 
               <p className="text-sm text-muted-foreground">
-                This profile is stored in the backend and used to make AI suggestions more
-                relevant, safer, and more personalized.
+                This profile is stored in the backend and used to make AI
+                suggestions more relevant, safer, and more personalized.
               </p>
             </div>
           </GlassCard>
@@ -609,9 +655,7 @@ export function SettingsScreen() {
             <p className="text-sm text-muted-foreground mb-2">
               AI Eye Controlled Communication Platform
             </p>
-            <p className="text-xs text-muted-foreground">
-              Version 1.0.0
-            </p>
+            <p className="text-xs text-muted-foreground">Version 1.0.0</p>
           </GlassCard>
         </motion.div>
       </div>

@@ -152,7 +152,7 @@ const GlassCard = ({
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px" }}
     whileHover={{ scale: 1.03, y: -8 }}
-    className={`backdrop-blur-xl bg-gradient-to-br from-white/5 via-white/3 to-white/8 border border-white/10 rounded-3xl p-8 ${className}`}
+    className={`backdrop-blur-xl bg-gradient-to-br from-white/5 via-white/3 to-white/8 border border-white/10 rounded-3xl p-5 ${className}`}
     style={{
       background:
         "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%)",
@@ -181,7 +181,7 @@ const HeroSection = ({
   return (
     <motion.section
       style={{ y, opacity }}
-      className="relative min-h-screen flex items-center justify-center px-4 pt-20"
+      className="relative min-h-[65vh] flex items-center justify-center px-4 pt-16"
     >
       {/* Animated Rings */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -228,7 +228,7 @@ const HeroSection = ({
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 1 }}
-          className="text-7xl md:text-9xl font-black mb-6 leading-none"
+          className="text-5xl md:text-7xl font-black mb-4 leading-tight"
           style={{
             background:
               "linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #ec4899 50%, #6366f1 100%)",
@@ -246,7 +246,7 @@ const HeroSection = ({
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.8 }}
-          className="text-3xl md:text-4xl font-light text-white/80 mb-6"
+          className="text-2xl md:text-3xl font-light text-white/80 mb-4"
         >
           Communicate With Your{" "}
           <span className="font-semibold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
@@ -259,7 +259,7 @@ const HeroSection = ({
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.8 }}
-          className="text-xl text-white/60 max-w-3xl mx-auto mb-12 leading-relaxed"
+          className="text-base text-white/60 max-w-3xl mx-auto mb-8 leading-relaxed"
         >
           AI-powered eye-controlled communication platform empowering people
           with motor disabilities to express themselves freely.
@@ -300,7 +300,7 @@ const HeroSection = ({
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.8 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 max-w-4xl mx-auto"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto"
         >
           {[
             { value: "100%", label: "Hands-Free" },
@@ -340,10 +340,10 @@ const AboutSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Why IrisComm?
           </h2>
-          <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base text-white/60 max-w-3xl mx-auto leading-relaxed">
             Millions of people worldwide cannot speak or type due to motor
             disabilities. Traditional AAC devices cost thousands of dollars.
           </p>
@@ -473,24 +473,24 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section className="py-32 px-4 relative">
+    <section className="py-16 px-4 relative">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Revolutionary Features
           </h2>
-          <p className="text-xl text-white/60 max-w-3xl mx-auto">
+          <p className="text-base text-white/60 max-w-3xl mx-auto">
             Cutting-edge technology that transforms eye movements into fluent
             communication.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.map((feature, i) => (
             <GlassCard key={i} glow>
               <div
@@ -527,24 +527,24 @@ const DemoSection = ({
   ];
 
   return (
-    <section id="demo" className="py-32 px-4 relative">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-16 px-4 relative">
+      <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Live Demo Interface
           </h2>
-          <p className="text-xl text-white/60">
+          <p className="text-base text-white/60">
             Experience the future of communication
           </p>
         </motion.div>
 
-        <GlassCard className="p-8 md:p-12">
-          <div className="grid md:grid-cols-2 gap-8">
+        <GlassCard className="p-6 md:p-8">
+          <div className="grid md:grid-cols-2 gap-6">
             {/* Webcam Preview */}
             <div className="space-y-6">
               <div className="aspect-video bg-gradient-to-br from-indigo-600/20 via-purple-600/20 to-pink-600/20 rounded-2xl border border-white/10 flex items-center justify-center relative overflow-hidden">
@@ -668,15 +668,15 @@ const TechStack = () => {
   ];
 
   return (
-    <section className="py-32 px-4 relative">
+    <section className="py-16 px-4 relative">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Powered by Advanced Technology
           </h2>
         </motion.div>

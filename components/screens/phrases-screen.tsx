@@ -39,10 +39,10 @@ const categoryColors = {
 };
 
 export function PhrasesScreen() {
-  const { 
-    phrases, 
-    setCurrentText, 
-    setCurrentScreen, 
+  const {
+    phrases,
+    setCurrentText,
+    setCurrentScreen,
     dwellTime,
     customPhrases,
     addCustomPhrase,
@@ -69,8 +69,8 @@ export function PhrasesScreen() {
 
   const getAllPhrases = () => {
     const all = [...phrases];
-    customPhrases.forEach(p => {
-      if (!all.find(x => x.id === p.id)) all.push(p);
+    customPhrases.forEach((p) => {
+      if (!all.find((x) => x.id === p.id)) all.push(p);
     });
     return all;
   };
@@ -78,7 +78,8 @@ export function PhrasesScreen() {
   const filteredPhrases = () => {
     const all = getAllPhrases();
     if (activeCategory === "all") return all;
-    if (activeCategory === "favorites") return all.filter(p => favoritePhrases.includes(p.text));
+    if (activeCategory === "favorites")
+      return all.filter((p) => favoritePhrases.includes(p.text));
     if (activeCategory === "ai") return dynamicPhrases;
     if (activeCategory === "custom") return customPhrases;
     return all.filter((p) => p.category === activeCategory);
@@ -103,7 +104,7 @@ export function PhrasesScreen() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-6 pb-32">
+    <div className="px-3 py-4 pb-24">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -150,9 +151,12 @@ export function PhrasesScreen() {
           >
             {filteredPhrases().map((phrase, index) => {
               const Icon =
-                categoryIcons[phrase.category as keyof typeof categoryIcons] || Plus;
+                categoryIcons[phrase.category as keyof typeof categoryIcons] ||
+                Plus;
               const colorClass =
-                categoryColors[phrase.category as keyof typeof categoryColors] || "text-muted-foreground";
+                categoryColors[
+                  phrase.category as keyof typeof categoryColors
+                ] || "text-muted-foreground";
 
               return (
                 <motion.div
@@ -189,7 +193,11 @@ export function PhrasesScreen() {
                     </div>
                     <div className="flex gap-1">
                       <GazeButton
-                        variant={favoritePhrases.includes(phrase.text) ? "primary" : "default"}
+                        variant={
+                          favoritePhrases.includes(phrase.text)
+                            ? "primary"
+                            : "default"
+                        }
                         size="sm"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -199,7 +207,9 @@ export function PhrasesScreen() {
                         dwellTime={dwellTime}
                         className="shrink-0"
                       >
-                        <Star className={`w-4 h-4 ${favoritePhrases.includes(phrase.text) ? "fill-yellow-400 text-yellow-400" : ""}`} />
+                        <Star
+                          className={`w-4 h-4 ${favoritePhrases.includes(phrase.text) ? "fill-yellow-400 text-yellow-400" : ""}`}
+                        />
                       </GazeButton>
                       <GazeButton
                         variant="default"
@@ -272,19 +282,21 @@ export function PhrasesScreen() {
             <div className="mb-4">
               <p className="text-sm mb-2">Category</p>
               <div className="flex gap-2 flex-wrap">
-                {["custom", "medical", "food", "emotions", "requests"].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setNewPhraseCategory(cat)}
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      newPhraseCategory === cat 
-                        ? "bg-primary text-white" 
-                        : "bg-white/10"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                {["custom", "medical", "food", "emotions", "requests"].map(
+                  (cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setNewPhraseCategory(cat)}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        newPhraseCategory === cat
+                          ? "bg-primary text-white"
+                          : "bg-white/10"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ),
+                )}
               </div>
             </div>
             <div className="flex gap-2">

@@ -113,7 +113,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
         transition={{ duration: 0.5, ease: "easeOut" }}
         whileHover={hoverEffect ? { scale: 1.02, y: -5 } : undefined}
         className={cn(
-          "relative overflow-hidden rounded-2xl p-6",
+          "relative overflow-hidden rounded-2xl p-4",
           variants[variant],
           glow && "animate-pulse-glow",
           hoverEffect && "transition-all duration-300 cursor-pointer",

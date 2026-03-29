@@ -2,7 +2,19 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Volume2, Play, Pause, RotateCcw, Gauge, User, Heart, Zap, Moon, Sun, Smile } from "lucide-react";
+import {
+  Volume2,
+  Play,
+  Pause,
+  RotateCcw,
+  Gauge,
+  User,
+  Heart,
+  Zap,
+  Moon,
+  Sun,
+  Smile,
+} from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { GazeButton } from "@/components/ui/GazeButton";
 import { SpeechWave } from "@/components/ui/speech-wave";
@@ -16,21 +28,23 @@ const voiceTypes = [
 ];
 
 export function SpeechScreen() {
-  const { 
-    currentText, 
-    voiceSpeed, 
-    setVoiceSpeed, 
-    isSpeaking, 
+  const {
+    currentText,
+    voiceSpeed,
+    setVoiceSpeed,
+    isSpeaking,
     setIsSpeaking,
     dwellTime,
     emotion,
     audioFeedback,
   } = useAppStore();
-  
+
   const [selectedVoice, setSelectedVoice] = useState("default");
   const [useEmotionVoice, setUseEmotionVoice] = useState(true);
   const [pitch, setPitch] = useState(1);
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [availableVoices, setAvailableVoices] = useState<
+    SpeechSynthesisVoice[]
+  >([]);
 
   useEffect(() => {
     const loadVoices = () => {
@@ -57,11 +71,11 @@ export function SpeechScreen() {
 
     const utterance = new SpeechSynthesisUtterance(currentText);
     utterance.rate = voiceSpeed;
-    
+
     // Emotion-matched voice settings
     let emotionPitch = 1;
     let emotionRate = voiceSpeed;
-    
+
     if (useEmotionVoice) {
       switch (emotion.emotion) {
         case "happy":
@@ -83,14 +97,16 @@ export function SpeechScreen() {
           break;
       }
     }
-    
+
     utterance.pitch = pitch * emotionPitch;
     utterance.rate = emotionRate;
-    
-    const voice = availableVoices.find((v) => 
-      selectedVoice === "male" ? v.name.toLowerCase().includes("male") :
-      selectedVoice === "female" ? v.name.toLowerCase().includes("female") :
-      true
+
+    const voice = availableVoices.find((v) =>
+      selectedVoice === "male"
+        ? v.name.toLowerCase().includes("male")
+        : selectedVoice === "female"
+          ? v.name.toLowerCase().includes("female")
+          : true,
     );
     if (voice) utterance.voice = voice;
 
@@ -108,7 +124,7 @@ export function SpeechScreen() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-6 pb-32">
+    <div className="px-3 py-4 pb-24">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -238,7 +254,10 @@ export function SpeechScreen() {
           className="w-full"
         >
           {useEmotionVoice ? (
-            <><Heart className="w-4 h-4" /> Enabled - voice adjusts to your emotion</>
+            <>
+              <Heart className="w-4 h-4" /> Enabled - voice adjusts to your
+              emotion
+            </>
           ) : (
             "Enable emotion-matched voice"
           )}
@@ -251,7 +270,10 @@ export function SpeechScreen() {
               { e: "calm", icon: Sun, color: "text-green-400" },
               { e: "stressed", icon: Zap, color: "text-red-400" },
             ].map(({ e, icon: Icon, color }) => (
-              <div key={e} className={`flex items-center gap-1 px-2 py-1 rounded-full bg-white/5 ${color}`}>
+              <div
+                key={e}
+                className={`flex items-center gap-1 px-2 py-1 rounded-full bg-white/5 ${color}`}
+              >
                 <Icon className="w-3 h-3" />
                 <span className="text-xs capitalize">{e}</span>
               </div>

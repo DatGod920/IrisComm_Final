@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   useState,
@@ -18,7 +17,6 @@ interface GazeButtonProps {
   variant?: "default" | "primary" | "secondary" | "emergency" | "success";
   size?: "sm" | "md" | "lg" | "xl";
   dwellTime?: number;
-  /** Extra padding (px) when testing gaze vs button bounds; mirrors GazeController stickiness. */
   gazeStickiness?: number;
   onGazeSelect?: () => void;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -35,7 +33,7 @@ export function GazeButton({
   variant = "default",
   size = "lg",
   dwellTime = 1500,
-  gazeStickiness = 20,
+  gazeStickiness = 24,
   onGazeSelect,
   onClick,
   disabled = false,
@@ -52,29 +50,31 @@ export function GazeButton({
   const isCalibrated = useAppStore((state) => state.isCalibrated);
   const startTimeRef = useRef<number | null>(null);
   const animationRef = useRef<number | null>(null);
+  const gazeFiredRef = useRef(false);
 
   const variants = {
     default: "bg-white/5 border-white/10 hover:bg-white/10 text-white",
     primary:
-      "bg-gradient-to-r from-primary to-secondary border-primary/50 hover:from-primary/90 hover:to-secondary/90 text-white",
+      "bg-gradient-to-r from-primary to-secondary border-primary/50 text-primary-foreground",
     secondary: "bg-white/10 border-white/20 hover:bg-white/15 text-white",
     emergency:
-      "bg-gradient-to-r from-red-600 to-red-700 border-red-500/50 hover:from-red-600/90 hover:to-red-700/90 text-white",
+      "bg-gradient-to-r from-red-600 to-red-700 border-red-500/50 text-white",
     success:
       "bg-gradient-to-r from-green-500 to-emerald-600 border-green-500/50 text-white",
   };
 
   const sizes = {
-    sm: "px-4 py-2 text-sm min-h-[48px]",
-    md: "px-6 py-3 text-base min-h-[56px]",
-    lg: "px-8 py-4 text-lg min-h-[64px]",
-    xl: "px-10 py-5 text-xl min-h-[72px]",
+    sm: "px-4 py-2 text-sm min-h-[52px]",
+    md: "px-6 py-3 text-base min-h-[60px]",
+    lg: "px-8 py-4 text-lg min-h-[72px]",
+    xl: "px-10 py-5 text-xl min-h-[80px]",
   };
 
   const stopDwell = useCallback(() => {
     setIsHovering(false);
     setProgress(0);
     startTimeRef.current = null;
+    gazeFiredRef.current = false;
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
@@ -91,6 +91,7 @@ export function GazeButton({
 
     setIsHovering(true);
     setProgress(0);
+    gazeFiredRef.current = false;
     startTimeRef.current = Date.now();
 
     const animate = () => {
@@ -100,7 +101,10 @@ export function GazeButton({
       setProgress(newProgress);
 
       if (newProgress >= 100) {
-        onGazeSelect?.();
+        if (!gazeFiredRef.current) {
+          gazeFiredRef.current = true;
+          onGazeSelect?.();
+        }
         stopDwell();
       } else {
         animationRef.current = requestAnimationFrame(animate);
@@ -155,6 +159,7 @@ export function GazeButton({
     if (disabled || loading) return;
     setIsHovering(true);
     setProgress(0);
+    gazeFiredRef.current = false;
 
     const startTime = Date.now();
     const animate = () => {
@@ -162,7 +167,8 @@ export function GazeButton({
       const newProgress = Math.min((elapsed / dwellTime) * 100, 100);
       setProgress(newProgress);
 
-      if (newProgress >= 100 && onGazeSelect) {
+      if (newProgress >= 100 && onGazeSelect && !gazeFiredRef.current) {
+        gazeFiredRef.current = true;
         onGazeSelect();
         setIsHovering(false);
         setProgress(0);
@@ -177,6 +183,7 @@ export function GazeButton({
   const handleMouseLeave = () => {
     setIsHovering(false);
     setProgress(0);
+    gazeFiredRef.current = false;
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
@@ -189,9 +196,12 @@ export function GazeButton({
   };
 
   const content = children ?? title;
+  const radius = 22;
+  const circumference = 2 * Math.PI * radius;
+  const dashOffset = circumference - (circumference * progress) / 100;
 
   return (
-    <motion.button
+    <button
       ref={buttonRef}
       type="button"
       data-gaze-interactive="true"
@@ -201,46 +211,56 @@ export function GazeButton({
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
       disabled={disabled || loading}
-      whileHover={{ scale: disabled ? 1 : 1.05 }}
-      whileTap={{ scale: disabled ? 1 : 0.98 }}
       className={cn(
-        "relative rounded-2xl border-2 font-semibold transition-all duration-300",
-        "focus:outline-none focus:ring-4 focus:ring-primary/50",
+        "relative overflow-hidden rounded-xl border-2 font-semibold",
+        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         variants[variant],
         sizes[size],
         className,
       )}
     >
-      {/* Progress overlay */}
+      {showProgress && isHovering && progress > 0 && (
+        <div
+          className="pointer-events-none absolute inset-0 bg-foreground/15"
+          style={{ width: `${progress}%` }}
+        />
+      )}
+
       {showProgress && isHovering && (
-        <motion.div
-          className="absolute inset-0 bg-white/20 rounded-2xl overflow-hidden"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: progress / 100 }}
-          style={{ transformOrigin: "left" }}
-          transition={{ duration: 0.1 }}
-        />
+        <svg
+          className="pointer-events-none absolute right-2 top-2 h-12 w-12"
+          viewBox="0 0 56 56"
+          aria-hidden
+        >
+          <circle
+            cx="28"
+            cy="28"
+            r={radius}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            className="text-foreground/20"
+          />
+          <circle
+            cx="28"
+            cy="28"
+            r={radius}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeDasharray={circumference}
+            strokeDashoffset={dashOffset}
+            strokeLinecap="round"
+            className="text-primary"
+            transform="rotate(-90 28 28)"
+          />
+        </svg>
       )}
 
-      {/* Glow ring */}
-      {isHovering && (
-        <motion.div
-          className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary to-secondary opacity-30 blur-lg"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          exit={{ opacity: 0 }}
-        />
-      )}
-
-      {/* Content */}
       <span className="relative z-10 flex items-center justify-center gap-3">
         {loading ? (
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full"
-          />
+          <span className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-white/30 border-t-white" />
         ) : (
           <>
             {icon && <span className="text-2xl">{icon}</span>}
@@ -248,6 +268,6 @@ export function GazeButton({
           </>
         )}
       </span>
-    </motion.button>
+    </button>
   );
 }

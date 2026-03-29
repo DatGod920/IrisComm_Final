@@ -2,11 +2,10 @@
 
 import { useEffect, useCallback, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
 import { useEyeTracking } from "@/hooks/useEyeTracking";
 import { useHandTracking } from "@/hooks/useHandTracking";
 import { useAppStore } from "@/lib/store";
-import { GazeCursor3D } from "./ui/gaze-cursor-3d";
+import { GazeCursorOverlay } from "./gaze/GazeCursorOverlay";
 import { toast } from "sonner";
 import { aiService } from "@/lib/ai-service";
 import { voiceService } from "@/lib/voice-service";
@@ -172,7 +171,6 @@ export function GazeController() {
     setIsCalibrated,
     setCalibrationProgress,
     currentScreen, 
-    setCurrentScreen,
     backspace, 
     appendToText, 
     speakCurrentSentence,
@@ -455,16 +453,10 @@ export function GazeController() {
     if (!isCalibrated) {
       setIsCalibrated(true);
     }
-
-    if (currentScreen === "calibration") {
-      setCurrentScreen("communication");
-    }
   }, [
-    currentScreen,
     eyeState.isCalibrated,
     isCalibrated,
     setCalibrationProgress,
-    setCurrentScreen,
     setIsCalibrated,
   ]);
 
@@ -624,43 +616,30 @@ export function GazeController() {
         playsInline
       />
 
-      {/* Emergency Button UI in the bottom right corner */}
-      {currentScreen !== "landing" && (
-        <motion.div 
-          animate={isEmergencyHovered ? {
-            x: [0, -2, 2, -2, 2, 0],
-            scale: 1.1,
-          } : { scale: 1 }}
-          transition={isEmergencyHovered ? {
-            x: { repeat: Infinity, duration: 0.1 },
-            scale: { duration: 0.2 }
-          } : {}}
-          className={`fixed bottom-8 right-8 w-24 h-24 rounded-full border-4 flex items-center justify-center z-50 transition-all duration-300 ${
-            isEmergencyHovered 
-              ? "bg-red-600 border-white shadow-red-500/50 shadow-2xl animate-pulse" 
-              : "bg-red-900/50 border-red-500/30"
-          }`}
-        >
-          <div className="text-white text-[10px] font-bold text-center">
-            EMERGENCY<br/>GAZE 2S
+      {/* Fallback emergency control when not using the communication layout bottom bar */}
+      {currentScreen !== "landing" &&
+        currentScreen !== "communication" &&
+        currentScreen !== "calibration" && (
+          <div
+            className={`fixed bottom-8 right-8 z-50 flex h-28 w-28 items-center justify-center rounded-full border-4 transition-colors duration-200 ${
+              isEmergencyHovered
+                ? "border-white bg-red-600 shadow-lg shadow-red-500/40"
+                : "border-red-500/40 bg-red-900/60"
+            }`}
+          >
+            <div className="text-center text-[10px] font-bold leading-tight text-white">
+              EMERGENCY
+              <br />
+              GAZE 2S
+            </div>
+            {isEmergencyHovered && (
+              <div className="pointer-events-none absolute inset-0 animate-spin rounded-full border-4 border-white border-t-transparent" />
+            )}
           </div>
-          {isEmergencyHovered && (
-            <div className="absolute inset-0 rounded-full border-4 border-white border-t-transparent animate-spin" />
-          )}
-        </motion.div>
-      )}
+        )}
 
-      {/* 3D Gaze Cursor */}
       {cameraReady && eyeState.isTracking && (
-        <GazeCursor3D
-          position={{ 
-            x: gazePos.x * (typeof window !== "undefined" ? window.innerWidth : 1000), 
-            y: gazePos.y * (typeof window !== "undefined" ? window.innerHeight : 1000) 
-          }}
-          isDwelling={isEmergencyHovered || gazeDwellProgress > 0}
-          dwellProgress={isEmergencyHovered ? 1 : gazeDwellProgress}
-          isVisible={true}
-        />
+        <GazeCursorOverlay visible />
       )}
     </>
   );

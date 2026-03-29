@@ -672,6 +672,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (newData.length > 1000) newData.shift();
     return { heatmapData: newData };
   }),
+  isTracking: false,
+  setIsTracking: (tracking) => set({ isTracking: tracking }),
 
   isDemoMode: false,
   startDemoMode: () => set((state) => {

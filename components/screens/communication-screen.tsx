@@ -38,11 +38,11 @@ const keyboardRows = [
 ];
 
 export function CommunicationScreen() {
-  const { 
-    currentText, 
-    appendToText, 
-    clearText, 
-    backspace, 
+  const {
+    currentText,
+    appendToText,
+    clearText,
+    backspace,
     predictions,
     setCurrentText,
     isSpeaking,
@@ -61,7 +61,7 @@ export function CommunicationScreen() {
     addRecentMessage,
     audioFeedback,
   } = useAppStore();
-  
+
   const [isConnected] = useState(true);
   const [showSaved, setShowSaved] = useState(false);
   const [showRecent, setShowRecent] = useState(false);
@@ -71,14 +71,16 @@ export function CommunicationScreen() {
 
   const handleSpeak = useCallback(() => {
     if (!currentText || isSpeaking) return;
-    
+
     addRecentMessage(currentText);
     if (audioFeedback) {
-      const audio = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2LkYqKg3V0bWhUT0CAgH2Ai42dmJWNh4GAd3RxbGlVUUaAf3+BhYqQkJGPioWCf3t4d3Vvbm9xcXBubW1sa2ppaGdlZGNiYVBOTkxLSklIR0ZFRENCQUA/Pj08Ozo5OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw8ODg4NDQ0NDQ4ODg8ODg8ODg8=");
+      const audio = new Audio(
+        "data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2LkYqKg3V0bWhUT0CAgH2Ai42dmJWNh4GAd3RxbGlVUUaAf3+BhYqQkJGPioWCf3t4d3Vvbm9xcXBubW1sa2ppaGdlZGNiYVBOTkxLSklIR0ZFRENCQUA/Pj08Ozo5OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw8ODg4NDQ0NDQ4ODg8ODg8ODg8=",
+      );
       audio.volume = 0.3;
       audio.play().catch(() => {});
     }
-    
+
     setIsSpeaking(true);
     const utterance = new SpeechSynthesisUtterance(currentText);
     utterance.onend = () => setIsSpeaking(false);
@@ -87,12 +89,17 @@ export function CommunicationScreen() {
   }, [currentText, isSpeaking, setIsSpeaking, addRecentMessage, audioFeedback]);
 
   const startVoiceInput = useCallback(() => {
-    if (!("webkitSpeechRecognition" in window) && !("SpeechRecognition" in window)) {
+    if (
+      !("webkitSpeechRecognition" in window) &&
+      !("SpeechRecognition" in window)
+    ) {
       alert("Voice input not supported in this browser. Try Chrome.");
       return;
     }
 
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = true;
@@ -112,7 +119,9 @@ export function CommunicationScreen() {
       }
       if (finalTranscript) {
         setTranscript(finalTranscript);
-        setCurrentText(currentText + (currentText ? " " : "") + finalTranscript);
+        setCurrentText(
+          currentText + (currentText ? " " : "") + finalTranscript,
+        );
       }
     };
 
@@ -136,9 +145,12 @@ export function CommunicationScreen() {
     }
   }, []);
 
-  const handlePredictionSelect = useCallback((text: string) => {
-    setCurrentText(text);
-  }, [setCurrentText]);
+  const handlePredictionSelect = useCallback(
+    (text: string) => {
+      setCurrentText(text);
+    },
+    [setCurrentText],
+  );
 
   const carePrompt =
     emotion.emotion === "stressed" || emotion.emotion === "pain"
@@ -147,7 +159,8 @@ export function CommunicationScreen() {
           description:
             "The system detected stress or pain indicators. You can alert support, ask for help, or trigger emergency escalation.",
         }
-      : currentText.toLowerCase().includes("help") || currentText.toLowerCase().includes("pain")
+      : currentText.toLowerCase().includes("help") ||
+          currentText.toLowerCase().includes("pain")
         ? {
             title: "High-priority intent recognized",
             description:
@@ -181,7 +194,8 @@ export function CommunicationScreen() {
       tone: "default" as const,
       action: () => {
         addCaregiverMessage(
-          currentText || "Please check on me. IrisComm assist mode triggered a support ping.",
+          currentText ||
+            "Please check on me. IrisComm assist mode triggered a support ping.",
           "Patient",
         );
         setCurrentScreen("caregiver");
@@ -197,7 +211,8 @@ export function CommunicationScreen() {
           type: "Adaptive Emergency Assist",
           status: "Alert Sent",
           message:
-            currentText || "Adaptive care prompt triggered because the user may need urgent help.",
+            currentText ||
+            "Adaptive care prompt triggered because the user may need urgent help.",
         });
         addScore(40);
       },
@@ -205,12 +220,12 @@ export function CommunicationScreen() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col px-4 py-6 pb-32">
+    <div className="flex flex-col px-3 py-4 pb-24">
       {/* Header Status Bar */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between mb-4"
+        className="flex items-center justify-between mb-3"
       >
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 glass px-3 py-2 rounded-full">
@@ -219,7 +234,9 @@ export function CommunicationScreen() {
           </div>
         </div>
         <div className="flex items-center gap-2 glass px-3 py-2 rounded-full">
-          <Wifi className={`w-4 h-4 ${isConnected ? "text-accent" : "text-destructive"}`} />
+          <Wifi
+            className={`w-4 h-4 ${isConnected ? "text-accent" : "text-destructive"}`}
+          />
           <span className="text-sm font-medium">
             {isConnected ? "Connected" : "Offline"}
           </span>
@@ -227,20 +244,27 @@ export function CommunicationScreen() {
       </motion.div>
 
       {/* Main Text Display */}
-      <GlassCard variant="strong" className="mb-6 min-h-[140px] flex items-center justify-center">
-        <TypingIndicator 
-          text={currentText || "Start typing..."} 
-          className={currentText ? "text-foreground" : "text-muted-foreground/50"}
+      <GlassCard
+        variant="strong"
+        className="mb-4 min-h-[90px] flex items-center justify-center"
+      >
+        <TypingIndicator
+          text={currentText || "Start typing..."}
+          className={
+            currentText ? "text-foreground" : "text-muted-foreground/50"
+          }
           showCursor={!!currentText}
         />
       </GlassCard>
 
-      <div className="mb-6 grid gap-3 md:grid-cols-3">
+      <div className="mb-4 grid gap-3 md:grid-cols-3">
         <GlassCard variant="subtle" className="p-4">
           <div className="flex items-center gap-3">
             <BrainCircuit className="h-5 w-5 text-cyan-300" />
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-white/40">Neural Copilot</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+                Neural Copilot
+              </p>
               <p className="text-sm font-medium text-white/90">
                 {currentText ? "Context locked" : "Waiting for intent"}
               </p>
@@ -251,8 +275,12 @@ export function CommunicationScreen() {
           <div className="flex items-center gap-3">
             <HeartPulse className="h-5 w-5 text-emerald-300" />
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-white/40">Emotion-aware voice</p>
-              <p className="text-sm font-medium capitalize text-white/90">{emotion.emotion}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+                Emotion-aware voice
+              </p>
+              <p className="text-sm font-medium capitalize text-white/90">
+                {emotion.emotion}
+              </p>
             </div>
           </div>
         </GlassCard>
@@ -260,8 +288,12 @@ export function CommunicationScreen() {
           <div className="flex items-center gap-3">
             <TimerReset className="h-5 w-5 text-amber-300" />
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-white/40">Adaptive dwell</p>
-              <p className="text-sm font-medium text-white/90">{(dwellTime / 1000).toFixed(1)}s precision mode</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+                Adaptive dwell
+              </p>
+              <p className="text-sm font-medium text-white/90">
+                {(dwellTime / 1000).toFixed(1)}s precision mode
+              </p>
             </div>
           </div>
         </GlassCard>
@@ -272,11 +304,13 @@ export function CommunicationScreen() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="mb-6"
+        className="mb-4"
       >
         <div className="flex items-center gap-2 mb-3">
           <Sparkles className="w-4 h-4 text-secondary" />
-          <span className="text-sm font-medium text-muted-foreground">AI Suggestions</span>
+          <span className="text-sm font-medium text-muted-foreground">
+            AI Suggestions
+          </span>
         </div>
         <div className="flex flex-wrap gap-2">
           {predictions.map((prediction, index) => (
@@ -296,7 +330,7 @@ export function CommunicationScreen() {
         </div>
       </motion.div>
 
-      <GlassCard variant="strong" className="mb-6">
+      <GlassCard variant="strong" className="mb-4">
         <GenerativeAIPredictions
           currentText={currentText}
           emotion={emotion.emotion}
@@ -305,12 +339,18 @@ export function CommunicationScreen() {
       </GlassCard>
 
       {carePrompt && (
-        <GlassCard variant="strong" className="mb-6 border-red-400/20">
+        <GlassCard variant="strong" className="mb-4 border-red-400/20">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-red-300/80">Adaptive Care Guard</p>
-              <h3 className="mt-2 text-xl font-semibold text-white">{carePrompt.title}</h3>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-white/65">{carePrompt.description}</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-red-300/80">
+                Adaptive Care Guard
+              </p>
+              <h3 className="mt-2 text-xl font-semibold text-white">
+                {carePrompt.title}
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-white/65">
+                {carePrompt.description}
+              </p>
             </div>
             <GazeButton
               variant="emergency"
@@ -320,7 +360,8 @@ export function CommunicationScreen() {
                   type: "Emotion-Aware Escalation",
                   status: "Alert Sent",
                   message:
-                    currentText || "Emotion-aware escalation triggered from the communication screen.",
+                    currentText ||
+                    "Emotion-aware escalation triggered from the communication screen.",
                 })
               }
               onGazeSelect={() =>
@@ -328,7 +369,8 @@ export function CommunicationScreen() {
                   type: "Emotion-Aware Escalation",
                   status: "Alert Sent",
                   message:
-                    currentText || "Emotion-aware escalation triggered from the communication screen.",
+                    currentText ||
+                    "Emotion-aware escalation triggered from the communication screen.",
                 })
               }
               dwellTime={dwellTime}
@@ -340,11 +382,15 @@ export function CommunicationScreen() {
         </GlassCard>
       )}
 
-      <GlassCard variant="default" className="mb-6">
+      <GlassCard variant="default" className="mb-4">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-white/40">Independence Layer</p>
-            <h3 className="mt-2 text-lg font-semibold text-white">Action rail</h3>
+            <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+              Independence Layer
+            </p>
+            <h3 className="mt-2 text-lg font-semibold text-white">
+              Action rail
+            </h3>
           </div>
           <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-white/45">
             Voice + Gaze + AI
@@ -435,7 +481,7 @@ export function CommunicationScreen() {
             </>
           )}
         </GazeButton>
-        
+
         <GazeButton
           variant="default"
           size="lg"
@@ -443,7 +489,9 @@ export function CommunicationScreen() {
             if (currentText) {
               saveMessage(currentText);
               if (audioFeedback) {
-                const audio = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2LkYqKg3V0bWhUT0CAgH2Ai42dmJWNh4GAd3RxbGlVUUaAf3+BhYqQkJGPioWCf3t4d3Vvbm9xcXBubW1sa2ppaGdlZGNiYVBOTkxLSklIR0ZFRENCQUA/Pj08Ozo5OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw8ODg4NDQ0NDQ4ODg8ODg8ODg8=");
+                const audio = new Audio(
+                  "data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2LkYqKg3V0bWhUT0CAgH2Ai42dmJWNh4GAd3RxbGlVUUaAf3+BhYqQkJGPioWCf3t4d3Vvbm9xcXBubW1sa2ppaGdlZGNiYVBOTkxLSklIR0ZFRENCQUA/Pj08Ozo5OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw8ODg4NDQ0NDQ4ODg8ODg8ODg8=",
+                );
                 audio.volume = 0.3;
                 audio.play().catch(() => {});
               }
@@ -455,7 +503,7 @@ export function CommunicationScreen() {
         >
           <Bookmark className="w-6 h-6" />
         </GazeButton>
-        
+
         <GazeButton
           variant="default"
           size="lg"
@@ -472,8 +520,14 @@ export function CommunicationScreen() {
         <GazeButton
           variant={showSaved ? "primary" : "default"}
           size="md"
-          onClick={() => { setShowSaved(!showSaved); setShowRecent(false); }}
-          onGazeSelect={() => { setShowSaved(!showSaved); setShowRecent(false); }}
+          onClick={() => {
+            setShowSaved(!showSaved);
+            setShowRecent(false);
+          }}
+          onGazeSelect={() => {
+            setShowSaved(!showSaved);
+            setShowRecent(false);
+          }}
           dwellTime={dwellTime}
           className="flex-1"
         >
@@ -483,8 +537,14 @@ export function CommunicationScreen() {
         <GazeButton
           variant={showRecent ? "primary" : "default"}
           size="md"
-          onClick={() => { setShowRecent(!showRecent); setShowSaved(false); }}
-          onGazeSelect={() => { setShowRecent(!showRecent); setShowSaved(false); }}
+          onClick={() => {
+            setShowRecent(!showRecent);
+            setShowSaved(false);
+          }}
+          onGazeSelect={() => {
+            setShowRecent(!showRecent);
+            setShowSaved(false);
+          }}
           dwellTime={dwellTime}
           className="flex-1"
         >
@@ -506,8 +566,14 @@ export function CommunicationScreen() {
                 key={i}
                 variant="secondary"
                 size="sm"
-                onClick={() => { setCurrentText(msg); setShowSaved(false); }}
-                onGazeSelect={() => { setCurrentText(msg); setShowSaved(false); }}
+                onClick={() => {
+                  setCurrentText(msg);
+                  setShowSaved(false);
+                }}
+                onGazeSelect={() => {
+                  setCurrentText(msg);
+                  setShowSaved(false);
+                }}
                 dwellTime={dwellTime}
                 className="text-xs"
               >
@@ -531,8 +597,14 @@ export function CommunicationScreen() {
                 key={i}
                 variant="default"
                 size="sm"
-                onClick={() => { setCurrentText(msg); setShowRecent(false); }}
-                onGazeSelect={() => { setCurrentText(msg); setShowRecent(false); }}
+                onClick={() => {
+                  setCurrentText(msg);
+                  setShowRecent(false);
+                }}
+                onGazeSelect={() => {
+                  setCurrentText(msg);
+                  setShowRecent(false);
+                }}
                 dwellTime={dwellTime}
                 className="text-xs"
               >
@@ -560,14 +632,14 @@ export function CommunicationScreen() {
                 onClick={() => appendToText(key)}
                 onGazeSelect={() => appendToText(key)}
                 dwellTime={dwellTime}
-                className="w-9 h-12 md:w-12 md:h-14 text-lg font-semibold"
+                className="w-8 h-10 md:w-10 md:h-12 text-base font-semibold"
               >
                 {key}
               </GazeButton>
             ))}
           </div>
         ))}
-        
+
         {/* Bottom row with space and backspace */}
         <div className="flex justify-center gap-2">
           <GazeButton
@@ -576,30 +648,30 @@ export function CommunicationScreen() {
             onClick={backspace}
             onGazeSelect={backspace}
             dwellTime={dwellTime}
-            className="w-20 h-12 md:w-24 md:h-14"
+            className="w-16 h-10 md:w-20 md:h-12"
           >
             <Delete className="w-5 h-5" />
           </GazeButton>
-          
+
           <GazeButton
             variant="default"
             size="md"
             onClick={() => appendToText(" ")}
             onGazeSelect={() => appendToText(" ")}
             dwellTime={dwellTime}
-            className="flex-1 max-w-xs h-12 md:h-14"
+            className="flex-1 max-w-xs h-10 md:h-12"
           >
             <Space className="w-5 h-5" />
             Space
           </GazeButton>
-          
+
           <GazeButton
             variant="primary"
             size="md"
             onClick={handleSpeak}
             onGazeSelect={handleSpeak}
             dwellTime={dwellTime}
-            className="w-20 h-12 md:w-24 md:h-14"
+            className="w-16 h-10 md:w-20 md:h-12"
             disabled={!currentText || isSpeaking}
           >
             <Volume2 className="w-5 h-5" />

@@ -493,7 +493,7 @@ function GlassCard({
           : "0 30px 60px rgba(0,0,0,0.5)",
         transition: { duration: 0.4 },
       }}
-      className={`rounded-[2rem] p-8 border ${variants[variant]} ${className}`}
+      className={`rounded-[2rem] p-5 border ${variants[variant]} ${className}`}
       style={{
         background:
           variant === "extreme"
@@ -542,10 +542,10 @@ function HoloButton({
   };
 
   const sizes = {
-    sm: "px-5 py-2.5 text-sm min-h-[45px]",
-    md: "px-7 py-3.5 text-base min-h-[55px]",
-    lg: "px-9 py-4.5 text-lg min-h-[65px]",
-    xl: "px-11 py-5.5 text-xl min-h-[75px]",
+    sm: "px-4 py-2 text-sm min-h-[40px]",
+    md: "px-5 py-2.5 text-base min-h-[48px]",
+    lg: "px-7 py-3 text-lg min-h-[56px]",
+    xl: "px-8 py-3.5 text-lg min-h-[64px]",
   };
 
   return (
@@ -623,7 +623,7 @@ function NavBar({
       initial={{ y: 150, opacity: 0, scale: 0.9 }}
       animate={{ y: 0, opacity: 1, scale: 1 }}
       transition={{ delay: 0.8, duration: 0.7, type: "spring", stiffness: 200 }}
-      className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6 pb-8"
+      className="fixed bottom-0 left-0 right-0 z-50 p-3 md:p-4 pb-4"
     >
       <div
         className="max-w-5xl mx-auto backdrop-blur-3xl rounded-[2rem] p-3"
@@ -746,12 +746,12 @@ function LandingScreen({
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-16 md:py-24"
+      className="min-h-[65vh] flex flex-col items-center justify-center px-4 py-12"
     >
       {/* Hero Section */}
       <motion.div
         variants={itemVariants}
-        className="text-center max-w-6xl mx-auto mb-20"
+        className="text-center max-w-6xl mx-auto mb-12"
       >
         {/* 3D Logo handled by Canvas - positioned absolutely */}
 
@@ -764,7 +764,7 @@ function LandingScreen({
             type: "spring",
             stiffness: 100,
           }}
-          className="text-7xl md:text-9xl lg:text-[12rem] font-black mb-8 leading-none"
+          className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight"
           style={{
             background:
               "linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #ec4899 50%, #6366f1 100%)",
@@ -782,7 +782,7 @@ function LandingScreen({
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.8 }}
-          className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white/80 mb-10 tracking-tight"
+          className="text-2xl md:text-3xl font-extralight text-white/80 mb-6 tracking-tight"
         >
           Communicate with your{" "}
           <span className="font-semibold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
@@ -807,7 +807,7 @@ function LandingScreen({
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12"
         >
           <HoloButton
             variant="primary"
@@ -1113,7 +1113,7 @@ export default function UltraAdvancedPage() {
               />
             )}
             {currentScreen === "communication" && (
-              <div className="container mx-auto px-4 pt-24 pb-32">
+              <div className="container mx-auto px-4 pt-16 pb-24">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1183,7 +1183,7 @@ export default function UltraAdvancedPage() {
               </div>
             )}
             {currentScreen === "ar" && (
-              <div className="container mx-auto px-4 pt-24 pb-32">
+              <div className="container mx-auto px-4 pt-16 pb-24">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -1194,7 +1194,7 @@ export default function UltraAdvancedPage() {
               </div>
             )}
             {currentScreen === "smartHome" && (
-              <div className="container mx-auto px-4 pt-24 pb-32">
+              <div className="container mx-auto px-4 pt-16 pb-24">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1215,7 +1215,7 @@ export default function UltraAdvancedPage() {
               </div>
             )}
             {currentScreen === "settings" && (
-              <div className="container mx-auto px-4 pt-24 pb-32">
+              <div className="container mx-auto px-4 pt-16 pb-24">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1340,12 +1340,12 @@ export default function UltraAdvancedPage() {
               </div>
             )}
             {currentScreen === "caregiver" && (
-              <div className="container mx-auto pt-24 pb-32">
+              <div className="container mx-auto pt-16 pb-24">
                 <CaregiverDashboard />
               </div>
             )}
             {currentScreen === "games" && (
-              <div className="container mx-auto px-4 pt-24 pb-32">
+              <div className="container mx-auto px-4 pt-16 pb-24">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -1364,7 +1364,7 @@ export default function UltraAdvancedPage() {
               </div>
             )}
             {currentScreen === "rehab" && (
-              <div className="container mx-auto px-4 pt-24 pb-32">
+              <div className="container mx-auto px-4 pt-16 pb-24">
                 <div className="max-w-6xl mx-auto space-y-16">
                   <div className="text-center">
                     <h2 className="text-5xl font-black text-white mb-4">

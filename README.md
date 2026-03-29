@@ -6,6 +6,8 @@ This is the **most advanced version** featuring state-of-the-art visual effects,
 
 ---
 
+OPEN AS localhost:3000/advanced
+
 ## ✨ What Makes This ULTRA-ADVANCED?
 
 ### 🎨 Visual Technologies Used
